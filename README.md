@@ -21,3 +21,21 @@
 
 
 
+## 如何使用：
+
+你需要自行安装和配置[nvm](https://github.com/nvm-sh/nvm)
+
+```cmd
+nvm use 18
+cd ./view
+npm install 
+npm run serve
+```
+
+然后，你应该可以在访问:[127.0.0.1:8080](127.0.0.1:8080)来访问前端。
+
+
+
+## 如何修改代码：
+
+目前所有页面代码逻辑都在./view/src/App.vue中，可以自行修改。
