@@ -6,7 +6,13 @@
     <input type="number" v-model="targetPage" @keydown.enter="triggerGoToPage" min="1" :max="totalPages" />
 
     <button @click="nextPage">Next Page</button>
+
     <p>Total Pages: {{ totalPages }}</p>
+
+    <!-- 显示阅读进度百分比 -->
+    <div class="progress">
+      {{ readingProgress }}%
+    </div>
   </div>
 </template>
 
@@ -17,6 +23,7 @@ export default {
     nextPage: Function,    // 下一页方法
     goToPage: Function,    // 父组件传递的跳转方法
     totalPages: Number,    // 总页数
+    readingProgress: Number, // 阅读进度百分比
   },
   data() {
     return {
@@ -24,11 +31,10 @@ export default {
     };
   },
   methods: {
-    // 本地方法，调用传递的 goToPage 方法
     triggerGoToPage() {
       // 检查输入的页码是否在范围内
       if (this.targetPage >= 1 && this.targetPage <= this.totalPages) {
-        this.goToPage(this.targetPage); // 调用传递的 goToPage
+        this.goToPage(this.targetPage); // 调用父组件传递的 goToPage
       }
     },
   },
@@ -39,20 +45,32 @@ export default {
 .footer {
   padding: 20px;
   text-align: center;
+  position: relative;
 }
+
 button {
   margin: 0 10px;
   padding: 10px;
   font-size: 16px;
 }
+
 input {
   width: 50px;
   margin: 0 10px;
   padding: 10px;
   text-align: center;
 }
+
 p {
   display: inline;
   font-size: 16px;
+}
+
+.progress {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 16px;
+  color: #666;
 }
 </style>

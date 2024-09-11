@@ -16,6 +16,7 @@
         :nextPage="nextPage"
         :goToPage="goToPage"
         :totalPages="totalPages"
+        :readingProgress="readingProgress"
     />
   </div>
 </template>
@@ -42,6 +43,11 @@ export default {
     totalPages() {
       // 返回分页的总数
       return this.pages.length;
+    },
+    readingProgress() {
+      // 计算阅读进度百分比
+      if (this.totalPages === 0) return 0;
+      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100); // 计算百分比，处理双页显示
     },
   },
   methods: {
@@ -112,7 +118,6 @@ export default {
       }
     },
     goToPage(pageNumber) {
-      // 计算目标页码的索引
       const targetIndex = (pageNumber - 1) * 2;
       if (targetIndex >= 0 && targetIndex < this.pages.length) {
         this.currentPageIndex = targetIndex;
