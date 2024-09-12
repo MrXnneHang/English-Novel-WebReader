@@ -64,17 +64,28 @@ export default {
     },
     paginateText() {
       this.pages = [];
-      const linesPerPage = 25;
-      const maxLineLength = 75;
+      const linesPerPage = 30;
+      const maxLineLength = 90;
+      const indentSize = 3;  // 设定段落首行缩进字符数
+      const indent = ' '.repeat(indentSize); // 根据缩进大小生成空格字符串
       const lines = this.fileContent.split('\n');
       let currentPage = '';
       let currentLineCount = 0;
       let tempLine = '';
+      let isParagraphStart = true;  // 标记是否是段落的首行
+
       lines.forEach((line) => {
         const words = line.split(' ');
         words.forEach((word) => {
           if ((tempLine + word).length > maxLineLength) {
-            currentPage += tempLine.trim() + '\n';
+            // 添加段落首行缩进
+            if (isParagraphStart) {
+              currentPage += indent + tempLine.trim() + '\n';
+              isParagraphStart = false;  // 标记该段落已开始
+            } else {
+              currentPage += tempLine.trim() + '\n';
+            }
+
             currentLineCount += 1;
             if (currentLineCount >= linesPerPage) {
               this.pages.push(currentPage);
@@ -85,8 +96,17 @@ export default {
           }
           tempLine += word + ' ';
         });
+
+        // 判断换行是否是段落结束（即空行）
         if (tempLine.trim() !== '') {
-          currentPage += tempLine.trim() + '\n';
+          // 添加段落首行缩进
+          if (isParagraphStart) {
+            currentPage += indent + tempLine.trim() + '\n';
+            isParagraphStart = false;
+          } else {
+            currentPage += tempLine.trim() + '\n';
+          }
+
           tempLine = '';
           currentLineCount += 1;
           if (currentLineCount >= linesPerPage) {
@@ -94,8 +114,12 @@ export default {
             currentPage = '';
             currentLineCount = 0;
           }
+        } else {
+          // 空行表示段落结束，下一行是新段落的开始
+          isParagraphStart = true;
         }
       });
+
       if (currentPage.trim() !== '') {
         this.pages.push(currentPage);
       }
