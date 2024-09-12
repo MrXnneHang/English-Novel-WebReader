@@ -33,6 +33,17 @@ cd ./view
 npm install 
 npm run serve
 ```
+修改后端端口: 根据你`./run.py`指定的端口，修改以下文件「没有更改的情况下，默认为5000」:
+`./view/src/App.vue`:
+```vue
+http://localhost:5000/api/selected-word'
+```
+`./view/src/utils/axios.js`:
+```cmd
+axios.defaults.baseURL = 'http://127.0.0.1:5000';
+```
+你可以通过查找来定位，并且修改5000为你的后端端口。
+
 
 然后，你应该可以在访问:[127.0.0.1:8080](127.0.0.1:8080)来访问前端。
 
