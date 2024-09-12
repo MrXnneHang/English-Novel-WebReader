@@ -28,8 +28,9 @@ export default {
     };
   },
   watch: {
-    text(newVal) {
-      if (newVal) {
+    text(newVal, oldVal) {
+      // 只有当新的 text 不为空且与旧的 text 不同时，才触发 showMessage
+      if (newVal && newVal !== oldVal) {
         this.showMessage();
       }
     }
@@ -41,10 +42,6 @@ export default {
       if (this.timer) {
         clearTimeout(this.timer);
       }
-      // 自动关闭定时器
-      this.timer = setTimeout(() => {
-        this.isVisible = false;
-      }, 10000); // 10秒后自动关闭
     },
     closeMessage() {
       this.isVisible = false;
@@ -57,6 +54,10 @@ export default {
       // 模拟保存功能，你可以在这里执行任何想要的保存逻辑
       console.log('Word saved:', this.text);
       alert('Word saved: ' + this.text);
+    },
+    forceShowMessage() {
+      // 即使 text 没有改变，手动调用时也强制显示消息
+      this.showMessage();
     }
   }
 }

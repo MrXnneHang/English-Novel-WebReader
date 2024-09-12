@@ -156,6 +156,9 @@ export default {
         console.log("Selected text: ", selectedText);
         this.recordedWords.push(selectedText);
 
+        // 立即显示 "waiting for message..."
+        this.showMessageBubble('Waiting for message...');
+
         try {
           const response = await fetch('http://localhost:5000/api/selected-word', {
             method: 'POST',
@@ -165,25 +168,42 @@ export default {
             body: JSON.stringify({selectedText}),
           });
 
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
           const data = await response.json();
           console.log('Response from server:', data);
 
-          // 在请求成功后，显示消息气泡
-          this.showMessageBubble(selectedText);
+          // 在请求成功后，更新为后端返回的消息
+          this.updateMessageBubble(data.message);
         } catch (error) {
           console.error('Error sending selected word:', error);
 
           // 在请求失败时，显示错误的消息气泡
-          this.showMessageBubble('Error sending text to server.');
+          this.updateMessageBubble('Error sending text to server.');
         }
       }
     },
-    // 消息气泡显示逻辑
+
+// 显示消息气泡逻辑，首先显示 "waiting for message..."
     showMessageBubble(message) {
-      console.log('Showing message bubble with text:', message); // Debug line
+      console.log('Showing message bubble with text:', message);
       this.selectedText = message;
       this.showBubble = true;
-    }
-  },
+
+      // 保持气泡显示，并等待后端消息或错误信息更新内容
+    },
+
+// 更新消息气泡内容的逻辑
+    updateMessageBubble(newMessage) {
+      this.selectedText = newMessage;
+
+      // 设置自动关闭
+      setTimeout(() => {
+        this.showBubble = false;
+      }, 10000); // 10秒后隐藏消息气泡
+    },
+  }
 };
 </script>
