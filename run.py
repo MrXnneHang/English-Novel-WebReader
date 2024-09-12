@@ -34,11 +34,12 @@ def word_query_api(txt):
 def rec_sentence(text):
     count = 0
     count_list = [" ","'",",",".","?"]
-    string = "hello world,hey there"
+    string = text
     for i in string:
         if i in count_list:
             count += 1
     if count>2:
+        print(count)
         return 1
     else:
         return 0
@@ -50,12 +51,14 @@ def selected_word():
     selected_text = data.get('selectedText', '')
     is_sentence = rec_sentence(selected_text)
     if is_sentence:
+        print("翻译句子")
         processed_text = preprocess_selected_sentence(selected_text)
         translation = sentence_translate(processed_text)
         return jsonify({
             'message': f'{processed_text}:\n{translation}'
         })
     else:
+        print("翻译单词词组")
         response, matched = word_query_api(selected_text)
 
         # Store word and translation in global variables
