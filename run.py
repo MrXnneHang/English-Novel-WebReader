@@ -55,8 +55,8 @@ def save():
     global global_word, global_translation
 
     if global_word and global_translation:
-        save_word(global_word, global_translation)
-        return jsonify({'message': f'单词 "{global_word}" 已成功保存。'})
+        response = save_word(global_word, global_translation)
+        return jsonify({'message': response})
     else:
         return jsonify({'message': '没有可保存的数据！'}), 400
 

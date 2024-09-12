@@ -98,7 +98,7 @@ def save_word(word, matched):
         if entry["word"] == word:
             # 抛出单词已存在的异常
             print(f"Word '{word}' already exists in the dictionary.")
-            return 0
+            return f"Word '{word}' already exists in the dictionary."
 
     # 生成新的 ID（假设 ID 是根据现有的长度 + 1 自动生成）
     new_id = str(len(main) + 1)
@@ -132,6 +132,8 @@ def save_word(word, matched):
     with open("pos.yml", 'w', encoding='utf-8') as pos_file:
         yaml.dump(pos, pos_file, allow_unicode=True)
 
+
     print(f"Word '{word}' and its details have been saved successfully.")
+    return f"Word '{word}' and its details have been saved successfully."
 
 
