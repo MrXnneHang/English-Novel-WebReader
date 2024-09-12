@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 创建Axios实例
-axios.defaults.baseURL = 'http://127.0.0.1:8081';
+axios.defaults.baseURL = 'http://127.0.0.1:5000';
 export default axios;
 // // 请求拦截器
 // instance.interceptors.request.use(
