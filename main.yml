@@ -1,0 +1,18 @@
+- ID: '1'
+  create_user: xnne
+  created_at: '2024-09-10'
+  last_review_date: '2024-09-10'
+  review_count: 0
+  word: hello
+- ID: '2'
+  create_user: xnne
+  created_at: '2024-09-12'
+  last_review_date: '2024-09-12'
+  review_count: 0
+  word: Copyright
+- ID: '3'
+  create_user: xnne
+  created_at: '2024-09-12'
+  last_review_date: '2024-09-12'
+  review_count: 0
+  word: material culture
