@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
-from api import user_query, save_word
+from api import user_query, save_word,sentence_translate,preprocess_selected_sentence
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -23,7 +23,7 @@ def initialize_webdriver():
         driver = webdriver.Chrome(service=webconfig.service, options=webconfig.option)
 
 
-def query_api(txt):
+def word_query_api(txt):
     initialize_webdriver()
     matched = user_query(webconfig, driver, txt)
     string = ""
@@ -31,23 +31,41 @@ def query_api(txt):
         string += f"{i[0]}:{i[1]}\n"
     return string, matched
 
+def rec_sentence(text):
+    count = 0
+    count_list = [" ","'",",",".","?"]
+    string = "hello world,hey there"
+    for i in string:
+        if i in count_list:
+            count += 1
+    if count>2:
+        return 1
+    else:
+        return 0
 
 @app.route('/api/selected-word', methods=['POST'])
 def selected_word():
     global global_word, global_translation
     data = request.get_json()
     selected_text = data.get('selectedText', '')
+    is_sentence = rec_sentence(selected_text)
+    if is_sentence:
+        processed_text = preprocess_selected_sentence(selected_text)
+        translation = sentence_translate(processed_text)
+        return jsonify({
+            'message': f'{processed_text}:\n{translation}'
+        })
+    else:
+        response, matched = word_query_api(selected_text)
 
-    response, matched = query_api(selected_text)
+        # Store word and translation in global variables
+        global_word = selected_text
+        global_translation = matched
 
-    # Store word and translation in global variables
-    global_word = selected_text
-    global_translation = matched
-
-    return jsonify({
-        'message': f'{selected_text}:\n{response}',
-        'matched': matched
-    })
+        return jsonify({
+            'message': f'{selected_text}:\n{response}',
+            'matched': matched
+        })
 
 
 @app.route('/api/save_word', methods=['POST'])

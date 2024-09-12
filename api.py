@@ -11,7 +11,24 @@ import re
 import time
 import yaml
 
+import requests
+import json
 
+def sentence_translate(text):
+    url = "https://api.deeplx.org/your_deeplx_api_key/translate"
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = {"text":text, "source_lang":"EN","target_lang":"ZH"}
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        print(response)
+        return text
+
+def preprocess_selected_sentence(text):
+    return text.replace("\n","")
 
 def query(webconfig,driver,query_word="hello"):
 
