@@ -72,8 +72,8 @@ export default {
     },
     paginateText() {
       this.pages = [];
-      const linesPerPage = 30;
-      const maxLineLength = 90;
+      const linesPerPage = 22;
+      const maxLineLength = 75;
       const indentSize = 3;
       const indent = ' '.repeat(indentSize);
       const lines = this.fileContent.split('\n');

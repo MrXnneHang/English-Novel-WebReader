@@ -76,7 +76,7 @@ export default {
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  overflow-y: auto;  /* 添加垂直滚动条 */
+  overflow: hidden; /* 防止溢出 */
 }
 
 .message-header {
@@ -94,8 +94,10 @@ export default {
 }
 
 .message-content {
-  max-height: 240px;  /* 控制内容区域的最大高度，避免超出 */
+  max-height: 240px;  /* 控制内容区域的最大高度 */
   overflow-y: auto;   /* 内容滚动 */
+  white-space: pre-wrap; /* 保留换行符 */
+  word-break: break-word; /* 防止长单词溢出 */
 }
 
 .message-actions {
@@ -114,4 +116,5 @@ export default {
 .save-button:hover {
   background-color: #218838;
 }
+
 </style>
