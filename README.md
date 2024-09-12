@@ -2,7 +2,7 @@
 
 这是一个由vue构建的网页端txt阅读器，个人用来阅读英语原版书籍，目前支持单词查询，记录。后续会支持长句翻译，长句记录等等。
 
-![image-20240912150357298](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121507028.png) 
+![image-20240912151809643](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121518161.png) 
 
 目前支持上传文件并且显示。
 
