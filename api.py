@@ -41,13 +41,20 @@ def query(webconfig,driver,query_word="hello"):
             print("匹配到单词")
             for pos, trans in matches_group1:
                 print(f"{pos}: {trans}")
+                print(matches_group1)
             return matches_group1
         else:
             if matches_group2:
                 print("匹配到短语")
+                phrase_group = []
                 for trans in matches_group2:
                     print(f"phrase.:{trans}")
-            return matches_group2
+                    for matches in matches_group2:
+                        phrase_group.append(("phrase.",matches))
+                    print(phrase_group)
+                return phrase_group
+            else:
+                return matches_group2
 
     else:
         print("没有匹配到内容")
