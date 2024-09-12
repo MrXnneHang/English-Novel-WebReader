@@ -45,7 +45,7 @@ def selected_word():
     global_translation = matched
 
     return jsonify({
-        'message': f'{selected_text}:。\n{response}',
+        'message': f'{selected_text}:\n{response}',
         'matched': matched
     })
 
