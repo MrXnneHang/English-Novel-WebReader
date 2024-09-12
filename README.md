@@ -1,12 +1,18 @@
 ## 这是什么：
 
-这是一个由vue构建的网页端txt阅读器，个人用来阅读英语原版书籍，目前支持单词查询，记录。后续会支持长句翻译，长句记录等等。
+这是一个由vue构建的网页端txt阅读器，个人用来阅读英语原版书籍，目前支持单词查询，记录,支持长句翻译。
+
+### 单词查询和保存
 
 ![image-20240912163001490](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121630112.png)
 
+### 词组查询和保存
+
  ![image-20240912162929020](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121629345.png)
 
-目前支持上传文件并且显示。
+### 长句翻译：
+
+![image-20240912173949234](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121739709.png)
 
 
 
@@ -17,7 +23,7 @@
 * [x] 快速前往指定页
 * [x] 显示总页数
 * [x] 给出一个99.46%这样的阅读进度
-* [ ] 自定义每页的最大行数，每行字符数，以及字符大小。
+* [x] 自定义每页的最大行数，每行字符数，以及字符大小。
 * [x] 选中返回
 
 
@@ -34,15 +40,20 @@ cd ./view
 npm install 
 npm run serve
 ```
+
 修改后端端口: 根据你`./run.py`指定的端口，修改以下文件「没有更改的情况下，默认为5000」:
 `./view/src/App.vue`:
+
 ```vue
 http://localhost:5000/api/selected-word'
 ```
+
 `./view/src/utils/axios.js`:
+
 ```cmd
 axios.defaults.baseURL = 'http://127.0.0.1:5000';
 ```
+
 你可以通过查找来定位，并且修改5000为你的后端端口。
 
 
@@ -57,3 +68,4 @@ axios.defaults.baseURL = 'http://127.0.0.1:5000';
 ## 如何修改代码：
 
 目前代码主要写在`./view/src/`,`./api.py`中。
+
