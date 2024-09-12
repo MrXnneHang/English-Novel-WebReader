@@ -1,0 +1,6 @@
+chrome_driver: './chromedriver-win64/chromedriver.exe'
+chrome: './chrome-win64/chrome.exe'
+
+
+youdao_url: 'https://www.youdao.com/result?word=&lang=en'
+situations: ["的第三人称单数","的过去式和过去分词","的复数","的三单形式"]
