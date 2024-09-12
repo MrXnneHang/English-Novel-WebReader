@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       isVisible: false,
-      timer: null
+      autoCloseTimer: null // 用于存储自动关闭定时器 ID
     };
   },
   watch: {
@@ -37,14 +37,24 @@ export default {
   methods: {
     showMessage() {
       this.isVisible = true;
-      if (this.timer) {
-        clearTimeout(this.timer);
+
+      // 清除之前的定时器，避免重复启动
+      if (this.autoCloseTimer) {
+        clearTimeout(this.autoCloseTimer);
       }
+
+      // 设置新的定时器，在 10 秒后自动关闭消息气泡
+      this.autoCloseTimer = setTimeout(() => {
+        this.closeMessage();
+      }, 10000); // 10 秒钟
     },
     closeMessage() {
       this.isVisible = false;
-      if (this.timer) {
-        clearTimeout(this.timer);
+
+      // 清除定时器，防止自动关闭时已经关闭的消息气泡再次被触发
+      if (this.autoCloseTimer) {
+        clearTimeout(this.autoCloseTimer);
+        this.autoCloseTimer = null;
       }
     },
     async saveWord() {

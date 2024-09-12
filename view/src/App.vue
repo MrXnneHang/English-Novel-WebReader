@@ -165,7 +165,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({selectedText}),
+            body: JSON.stringify({ selectedText }),
           });
 
           if (!response.ok) {
@@ -186,21 +186,30 @@ export default {
       }
     },
 
-// 显示消息气泡逻辑，首先显示 "waiting for message..."
+    // 显示消息气泡逻辑，首先显示 "waiting for message..."
     showMessageBubble(message) {
       console.log('Showing message bubble with text:', message);
       this.selectedText = message;
       this.showBubble = true;
 
+      // 清除之前的定时器，避免重叠定时器问题
+      if (this.autoCloseTimer) {
+        clearTimeout(this.autoCloseTimer);
+      }
+
       // 保持气泡显示，并等待后端消息或错误信息更新内容
     },
 
-// 更新消息气泡内容的逻辑
+    // 更新消息气泡内容的逻辑
     updateMessageBubble(newMessage) {
       this.selectedText = newMessage;
 
       // 设置自动关闭
-      setTimeout(() => {
+      if (this.autoCloseTimer) {
+        clearTimeout(this.autoCloseTimer);
+      }
+
+      this.autoCloseTimer = setTimeout(() => {
         this.showBubble = false;
       }, 10000); // 10秒后隐藏消息气泡
     },
