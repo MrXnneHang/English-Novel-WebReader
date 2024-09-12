@@ -1,47 +1,65 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # 引入 CORS
-from api import user_query
+from flask import Flask, request, jsonify, g
+from flask_cors import CORS
+from api import user_query, save_word
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webrowser_config import WebConfig
 
 app = Flask(__name__)
-CORS(app)  # 允许所有来源的跨域请求
+CORS(app)
 
-# 初始化 WebConfig 和 WebDriver
 webconfig = WebConfig()
-
-# 持久化的 Chrome WebDriver
 driver = None
+
+# Global variables to store the last word and translation
+global_word = None
+global_translation = None
+
 
 def initialize_webdriver():
     global driver
     if driver is None:
-        # 仅当 driver 未被初始化时创建它
         driver = webdriver.Chrome(service=webconfig.service, options=webconfig.option)
 
+
 def query_api(txt):
-    initialize_webdriver()  # 确保 driver 已初始化
-    matched = user_query(webconfig,driver,txt)
+    initialize_webdriver()
+    matched = user_query(webconfig, driver, txt)
     string = ""
     for i in matched:
         string += f"{i[0]}:{i[1]}\n"
-    print(string)
-    return string
+    return string, matched
+
 
 @app.route('/api/selected-word', methods=['POST'])
 def selected_word():
+    global global_word, global_translation
     data = request.get_json()
     selected_text = data.get('selectedText', '')
 
-    # 调用 query_api 处理单词
-    response = query_api(selected_text)
+    response, matched = query_api(selected_text)
 
-    # 在返回的响应中包含翻译结果和消息
+    # Store word and translation in global variables
+    global_word = selected_text
+    global_translation = matched
+
     return jsonify({
-        'message': f'单词 "{selected_text}" 已成功处理。\n {response}'
+        'message': f'单词 "{selected_text}" 已成功处理。\n{response}',
+        'matched': matched
     })
+
+
+@app.route('/api/save_word', methods=['POST'])
+def save():
+    global global_word, global_translation
+
+    if global_word and global_translation:
+        save_word(global_word, global_translation)
+        return jsonify({'message': f'单词 "{global_word}" 已成功保存。'})
+    else:
+        return jsonify({'message': '没有可保存的数据！'}), 400
+
 
 if __name__ == '__main__':
     initialize_webdriver()

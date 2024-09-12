@@ -23,13 +23,12 @@ export default {
   },
   data() {
     return {
-      isVisible: false, // 初始状态为 false，只有当 text 存在时显示
-      timer: null // 用于存储计时器 ID
+      isVisible: false,
+      timer: null
     };
   },
   watch: {
     text(newVal, oldVal) {
-      // 只有当新的 text 不为空且与旧的 text 不同时，才触发 showMessage
       if (newVal && newVal !== oldVal) {
         this.showMessage();
       }
@@ -38,25 +37,40 @@ export default {
   methods: {
     showMessage() {
       this.isVisible = true;
-      // 清除之前的计时器，避免重复启动
       if (this.timer) {
         clearTimeout(this.timer);
       }
     },
     closeMessage() {
       this.isVisible = false;
-      // 手动关闭时，清除计时器
       if (this.timer) {
         clearTimeout(this.timer);
       }
     },
-    saveWord() {
-      // 模拟保存功能，你可以在这里执行任何想要的保存逻辑
-      console.log('Word saved:', this.text);
-      alert('Word saved: ' + this.text);
+    async saveWord() {
+      try {
+        const response = await fetch('http://localhost:5000/api/save_word', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+          // No body required for this request
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log('Word saved:', data.message);
+        alert(data.message);
+
+      } catch (error) {
+        console.error('Error saving word:', error);
+        alert('Error saving word.');
+      }
     },
     forceShowMessage() {
-      // 即使 text 没有改变，手动调用时也强制显示消息
       this.showMessage();
     }
   }
@@ -76,7 +90,7 @@ export default {
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  overflow: hidden; /* 防止溢出 */
+  overflow: hidden;
 }
 
 .message-header {
@@ -94,10 +108,10 @@ export default {
 }
 
 .message-content {
-  max-height: 240px;  /* 控制内容区域的最大高度 */
-  overflow-y: auto;   /* 内容滚动 */
-  white-space: pre-wrap; /* 保留换行符 */
-  word-break: break-word; /* 防止长单词溢出 */
+  max-height: 240px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .message-actions {
@@ -116,5 +130,4 @@ export default {
 .save-button:hover {
   background-color: #218838;
 }
-
 </style>
