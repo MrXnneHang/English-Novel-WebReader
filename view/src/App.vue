@@ -8,6 +8,7 @@
         :pages="pages"
         :currentPageIndex="currentPageIndex"
         :handleScroll="handleScroll"
+        :handleTextSelection="handleTextSelection"
     />
 
     <!-- 页脚组件，包含翻页功能 -->
@@ -34,20 +35,19 @@ export default {
   },
   data() {
     return {
-      fileContent: '',     // 存储整个文件内容
-      pages: [],           // 分页后的文本
+      fileContent: '', // 存储整个文件内容
+      pages: [], // 分页后的文本
       currentPageIndex: 0, // 当前页码索引
+      recordedWords: [], // 新增：记录已选择的单词
     };
   },
   computed: {
     totalPages() {
-      // 返回分页的总数
       return this.pages.length;
     },
     readingProgress() {
-      // 计算阅读进度百分比
       if (this.totalPages === 0) return 0;
-      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100); // 计算百分比，处理双页显示
+      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100);
     },
   },
   methods: {
@@ -64,15 +64,15 @@ export default {
     },
     paginateText() {
       this.pages = [];
-      const linesPerPage = 25;  // 每页最大行数
-      const maxLineLength = 75; // 每行最大字符数
+      const linesPerPage = 25;
+      const maxLineLength = 75;
       const lines = this.fileContent.split('\n');
       let currentPage = '';
       let currentLineCount = 0;
       let tempLine = '';
-      lines.forEach(line => {
+      lines.forEach((line) => {
         const words = line.split(' ');
-        words.forEach(word => {
+        words.forEach((word) => {
           if ((tempLine + word).length > maxLineLength) {
             currentPage += tempLine.trim() + '\n';
             currentLineCount += 1;
@@ -123,6 +123,29 @@ export default {
         this.currentPageIndex = targetIndex;
       }
     },
+    async handleTextSelection(selectedText) {
+      if (selectedText) {
+        console.log("Selected text: ", selectedText);
+        this.recordedWords.push(selectedText);
+
+        // 将选中的单词发送到后端，修改为后端的端口 5000
+        try {
+          const response = await fetch('http://localhost:5000/api/selected-word', { // 使用后端端口 5000
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ selectedText }),
+          });
+
+          // 解析 JSON 响应
+          const data = await response.json();
+          console.log('Response from server:', data);
+        } catch (error) {
+          console.error('Error sending selected word:', error);
+        }
+      }
+    }
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @wheel="handleScroll">
+  <div class="container" @wheel="handleScroll" @mouseup="selectText">
     <!-- 左边部分，显示当前的左边页内容 -->
     <div class="left">
       <pre>{{ currentLeftPage }}</pre>
@@ -17,9 +17,10 @@
 <script>
 export default {
   props: {
-    pages: Array,           // 接收分页数据
-    currentPageIndex: Number, // 接收当前页码索引
-    handleScroll: Function,   // 接收滚动事件处理
+    pages: Array,
+    currentPageIndex: Number,
+    handleScroll: Function,
+    handleTextSelection: Function, // 接收处理文本选择的回调函数
   },
   computed: {
     currentLeftPage() {
@@ -27,6 +28,18 @@ export default {
     },
     currentRightPage() {
       return this.pages[this.currentPageIndex + 1] || '';
+    },
+  },
+  methods: {
+    selectText() {
+      console.log("Mouse up event triggered"); // 调试日志
+      const selectedText = window.getSelection().toString().trim();
+      if (selectedText) {
+        console.log("Selected text: ", selectedText); // 调试日志
+        this.handleTextSelection(selectedText); // 传递选中的文本
+      } else {
+        console.log("No text selected");
+      }
     },
   },
 };
@@ -38,6 +51,7 @@ export default {
   height: 80vh;
   overflow: hidden;
 }
+
 .left, .right {
   flex: 1;
   font-size: 24px;
@@ -46,12 +60,15 @@ export default {
   word-wrap: break-word;
   overflow: hidden;
 }
+
 .left {
   background-color: #f0f0f0;
 }
+
 .right {
   background-color: #d0eaff;
 }
+
 .page-number {
   text-align: center;
   font-weight: bold;
