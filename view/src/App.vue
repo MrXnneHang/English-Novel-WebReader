@@ -9,6 +9,7 @@
         :currentPageIndex="currentPageIndex"
         :handleScroll="handleScroll"
         :handleTextSelection="handleTextSelection"
+        :text-selected="showMessageBubble"
     />
 
     <!-- 页脚组件，包含翻页功能 -->
@@ -19,6 +20,9 @@
         :totalPages="totalPages"
         :readingProgress="readingProgress"
     />
+
+    <!-- 消息气泡组件 -->
+    <MessageBubble v-if="showBubble" :text="selectedText" />
   </div>
 </template>
 
@@ -26,19 +30,23 @@
 import Header from './components/EbookHeader.vue';
 import Container from './components/TextContainer.vue';
 import Footer from './components/EbookFooter.vue';
+import MessageBubble from './components/MessageBubble.vue';  // 引入消息气泡组件
 
 export default {
   components: {
     Header,
     Container,
     Footer,
+    MessageBubble  // 注册消息气泡组件
   },
   data() {
     return {
-      fileContent: '', // 存储整个文件内容
-      pages: [], // 分页后的文本
-      currentPageIndex: 0, // 当前页码索引
-      recordedWords: [], // 新增：记录已选择的单词
+      fileContent: '',
+      pages: [],
+      currentPageIndex: 0,
+      recordedWords: [],
+      showBubble: false,  // 控制消息气泡显示
+      selectedText: '',    // 存储选中的文本
     };
   },
   computed: {
@@ -66,22 +74,21 @@ export default {
       this.pages = [];
       const linesPerPage = 30;
       const maxLineLength = 90;
-      const indentSize = 3;  // 设定段落首行缩进字符数
-      const indent = ' '.repeat(indentSize); // 根据缩进大小生成空格字符串
+      const indentSize = 3;
+      const indent = ' '.repeat(indentSize);
       const lines = this.fileContent.split('\n');
       let currentPage = '';
       let currentLineCount = 0;
       let tempLine = '';
-      let isParagraphStart = true;  // 标记是否是段落的首行
+      let isParagraphStart = true;
 
       lines.forEach((line) => {
         const words = line.split(' ');
         words.forEach((word) => {
           if ((tempLine + word).length > maxLineLength) {
-            // 添加段落首行缩进
             if (isParagraphStart) {
               currentPage += indent + tempLine.trim() + '\n';
-              isParagraphStart = false;  // 标记该段落已开始
+              isParagraphStart = false;
             } else {
               currentPage += tempLine.trim() + '\n';
             }
@@ -97,9 +104,7 @@ export default {
           tempLine += word + ' ';
         });
 
-        // 判断换行是否是段落结束（即空行）
         if (tempLine.trim() !== '') {
-          // 添加段落首行缩进
           if (isParagraphStart) {
             currentPage += indent + tempLine.trim() + '\n';
             isParagraphStart = false;
@@ -115,7 +120,6 @@ export default {
             currentLineCount = 0;
           }
         } else {
-          // 空行表示段落结束，下一行是新段落的开始
           isParagraphStart = true;
         }
       });
@@ -152,23 +156,33 @@ export default {
         console.log("Selected text: ", selectedText);
         this.recordedWords.push(selectedText);
 
-        // 将选中的单词发送到后端，修改为后端的端口 5000
         try {
-          const response = await fetch('http://localhost:5000/api/selected-word', { // 使用后端端口 5000
+          const response = await fetch('http://localhost:5000/api/selected-word', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ selectedText }),
+            body: JSON.stringify({selectedText}),
           });
 
-          // 解析 JSON 响应
           const data = await response.json();
           console.log('Response from server:', data);
+
+          // 在请求成功后，显示消息气泡
+          this.showMessageBubble(selectedText);
         } catch (error) {
           console.error('Error sending selected word:', error);
+
+          // 在请求失败时，显示错误的消息气泡
+          this.showMessageBubble('Error sending text to server.');
         }
       }
+    },
+    // 消息气泡显示逻辑
+    showMessageBubble(message) {
+      console.log('Showing message bubble with text:', message); // Debug line
+      this.selectedText = message;
+      this.showBubble = true;
     }
   },
 };
