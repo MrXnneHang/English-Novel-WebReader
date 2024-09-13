@@ -4,7 +4,7 @@
 
 ### 书架和书籍上传:
 
-![image-20240913132623598](C:\Users\Zhouyuan\AppData\Roaming\Typora\typora-user-images\image-20240913132623598.png)
+![image-20240913132735372](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409131327598.png)
 
 ### 单词查询和保存
 
@@ -52,4 +52,23 @@ npm run serve
 
 如果要完成查单词的功能，需要一些前置。
 具体参考:[free-EN2CN-dictionary](https://github.com/MrXnneHang/free-EN2CN-dictionary)的环境部署。  
+
+注意先查看`config.yml`中的chrome-driver,chrome路径是否正确。
+
+然后创建`./key.yml`
+
+内容:
+
+```yaml
+deeplx: your_api_key
+```
+
+这个L站有提供，在connect里可以看到。如果没有L站账户，可以等待后续本地运行deeplx的服务的版本。
+
+```cmd
+python -m pip install -r requirements.txt
+python run.py
+```
+
+
 
