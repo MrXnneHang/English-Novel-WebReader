@@ -33,7 +33,7 @@ import Footer from '@/components/EbookFooter.vue';
 import MessageBubble from '@/components/MessageBubble.vue';  // 引入消息气泡组件
 
 export default {
-  name: 'EbookReader',  // 给组件命名
+  name: 'EbookReader',
   components: {
     Header,
     Container,
@@ -42,37 +42,46 @@ export default {
   },
   data() {
     return {
-      fileContent: '',
+      fileContent: '',  // 文件内容
       pages: [],
       currentPageIndex: 0,
       recordedWords: [],
-      showBubble: false,  // 控制消息气泡显示
-      selectedText: '',    // 存储选中的文本
+      showBubble: false,
+      selectedText: ''
     };
   },
-  computed: {
-    totalPages() {
-      return this.pages.length;
-    },
-    readingProgress() {
-      if (this.totalPages === 0) return 0;
-      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100);
-    },
+  created() {
+    // 在组件创建时，检查路由参数是否包含书籍路径
+    const bookPath = this.$route.params.bookPath;
+    if (bookPath) {
+      this.loadBookFromPath(bookPath);
+    }
   },
   methods: {
-    onFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.fileContent = e.target.result;
-          this.paginateText();
-        };
-        reader.readAsText(file);
+    // 加载书籍内容
+    async loadBookFromPath(bookPath) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/load_book_content`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ bookPath })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        this.fileContent = data.fileContent;  // 假设后端返回书籍的文本内容
+        this.paginateText();  // 分页显示
+      } catch (error) {
+        console.error('Error loading book from path:', error);
       }
     },
     paginateText() {
-      this.pages = [];
+      const newPages = [];
       const linesPerPage = 22;
       const maxLineLength = 75;
       const indentSize = 3;
@@ -96,7 +105,7 @@ export default {
 
             currentLineCount += 1;
             if (currentLineCount >= linesPerPage) {
-              this.pages.push(currentPage);
+              newPages.push(currentPage); // 使用新的数组存储分页数据
               currentPage = '';
               currentLineCount = 0;
             }
@@ -116,7 +125,7 @@ export default {
           tempLine = '';
           currentLineCount += 1;
           if (currentLineCount >= linesPerPage) {
-            this.pages.push(currentPage);
+            newPages.push(currentPage); // 使用新的数组存储分页数据
             currentPage = '';
             currentLineCount = 0;
           }
@@ -126,8 +135,11 @@ export default {
       });
 
       if (currentPage.trim() !== '') {
-        this.pages.push(currentPage);
+        newPages.push(currentPage); // 使用新的数组存储分页数据
       }
+
+      // 将分页数据设置为响应式
+      this.pages = newPages;
     },
     handleScroll(event) {
       if (event.deltaY > 0) {
@@ -214,6 +226,16 @@ export default {
         this.showBubble = false;
       }, 10000); // 10秒后隐藏消息气泡
     },
+  },
+  computed: {
+    totalPages() {
+      return this.pages.length;  // 返回分页后的总页数
+    },
+    readingProgress() {
+      if (this.totalPages === 0) return 0;  // 如果没有分页，返回0
+      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100);  // 计算当前阅读进度百分比
+    }
   }
+
 };
 </script>

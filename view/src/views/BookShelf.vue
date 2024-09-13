@@ -40,9 +40,20 @@ export default {
       }
     },
     // 打开电子书阅读器页面
-    openBook(book) {
-      this.$router.push({name: 'EbookReader', params: {bookId: book.id}});
-    },
+    async openBook(book) {
+      try {
+        // 获取书籍绝对路径
+        const response = await axios.post('http://localhost:5000/api/get_book_abs_path', { book_title: book.title });
+        const bookAbsPath = response.data.book_abs_path;
+        console.log('Book absolute path:', bookAbsPath);
+
+        // 跳转到 EbookReader 页面并传递路径
+        this.$router.push({ name: 'EbookReader', params: { bookPath: bookAbsPath } });
+      } catch (error) {
+        console.error('Failed to fetch book path:', error);
+      }
+    }
+
   },
 };
 </script>

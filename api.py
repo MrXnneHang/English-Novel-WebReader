@@ -191,5 +191,13 @@ def get_book_list():
     books = [{"id": i, "title": book} for i, book in enumerate(book_list)]
     return books
 
+
+def get_book_abs_path(book_name):
+    book_dir = config["book_dir"]
+    book_path = os.path.join(book_dir, book_name)
+    book_abs_path = os.path.abspath(book_path)
+
+    return book_abs_path
+
 if __name__ == "__main__":
-    print(get_book_list())
+    print(get_book_abs_path("麦田里的守望者.txt"))
