@@ -4,5 +4,7 @@ word_create: './data/main.yml'
 word_translation: './data/pos.yml'
 sentence_translation: './data/sentences.yml' 
 
+book_dir: "./books"
+
 youdao_url: 'https://www.youdao.com/result?word=&lang=en'
 situations: ["的第三人称单数","的过去式和过去分词","的复数","的三单形式"]
