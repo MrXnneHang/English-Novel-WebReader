@@ -1,10 +1,8 @@
 <template>
   <div class="bookshelf-container">
     <div class="bookshelf">
-      <!-- 删除调试输出，保持页面简洁 -->
-      <div v-for="(book, index) in formattedBooks" :key="index" class="book">
+      <div v-for="(book, index) in formattedBooks" :key="index" class="book" @click="openBook(book)">
         <p v-if="book.id !== null">{{ book.title }}</p>
-        <button v-if="book.id !== null" @click="openBook(book)">Open</button>
       </div>
     </div>
   </div>
@@ -20,9 +18,9 @@ export default {
     },
   },
   computed: {
-    // 确保总共12个位置，如果书不够则用空位置补足
+    // 确保总共10个位置，如果书不够则用空位置补足
     formattedBooks() {
-      const totalSlots = 10; // 2行x6列，总共12个位置
+      const totalSlots = 10;
       const filledBooks = [...this.books];
       while (filledBooks.length < totalSlots) {
         filledBooks.push({id: null, title: ''});
@@ -48,10 +46,10 @@ export default {
 
 .bookshelf {
   display: grid;
-  grid-template-columns: repeat(5, 100px); /* 6 列，每列 100px */
-  grid-template-rows: repeat(2, 200px); /* 2 行，每行 200px */
+  grid-template-columns: repeat(5, 300px); /* 5 列，每列 300px */
+  grid-template-rows: repeat(2, 400px); /* 2 行，每行 400px */
   justify-content: center; /* 水平居中 */
-  gap: 250px; /* 书籍之间的间距 */
+  gap: 20px; /* 书籍之间的间距 */
 }
 
 .book {
@@ -60,21 +58,22 @@ export default {
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   box-sizing: border-box;
+  cursor: pointer; /* 添加鼠标悬停效果，提示可点击 */
+  transition: transform 0.3s ease; /* 添加缩放过渡效果 */
+}
+
+.book:hover {
+  transform: scale(1.05); /* 鼠标悬停时缩放效果 */
 }
 
 .book p {
   margin: 0;
-  font-size: 16px;
-}
-
-.book button {
-  margin-top: auto; /* 按钮固定在底部 */
-}
-
-.book:empty {
-  visibility: hidden; /* 隐藏空书籍项，保持布局 */
+  font-size: 20px; /* 调整字体大小 */
+  font-weight: bold; /* 字体加粗 */
+  color: #333; /* 字体颜色 */
 }
 </style>
