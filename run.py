@@ -129,6 +129,26 @@ def load_book_content():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/save_book', methods=['POST'])
+def save_book_api():
+    # 检查文件是否包含在请求中
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part in the request'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
+
+    # 保存文件到指定的目录
+    if file and (file.filename.endswith('.epub') or file.filename.endswith('.txt')):
+        save_path = os.path.join('./books', file.filename)
+        file.save(save_path)
+        return jsonify({'message': '书籍保存成功, 刷新页面查看'})
+    else:
+        return jsonify({'message': '书籍不是支持的 .txt 或者 .epub 格式'}), 400
+
+
 if __name__ == '__main__':
     initialize_webdriver()
     app.run(port=5000)
