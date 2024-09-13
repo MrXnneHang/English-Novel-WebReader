@@ -41,8 +41,31 @@ def convert_to_txt(book_path):
     # 将所有章节的正文连接起来
     full_text = "\n\n".join(all_text)
 
+    full_text = reformat_text(full_text)
     # 将输出保存为txt文件，或输出到控制台
     with open("book_text.txt", "w", encoding="utf-8") as f:
         f.write(full_text)
 
     print("正文提取完成并保存到 book_text.txt")
+
+
+def reformat_text(text):
+    lines = text.splitlines()
+    new_text = []
+    temp_paragraph = []
+
+    for line in lines:
+        if line.strip():  # 如果行非空白
+            temp_paragraph.append(line.strip())
+        else:
+            # 如果当前temp_paragraph有内容，说明是一个完整的段落
+            if temp_paragraph:
+                new_text.append(' '.join(temp_paragraph))  # 合并段落中的行
+                temp_paragraph = []  # 清空当前段落临时列表
+            new_text.append('')  # 保留段落间的空白行
+
+    # 处理文件最后可能的残留段落
+    if temp_paragraph:
+        new_text.append(' '.join(temp_paragraph))
+
+    return '\n'.join(new_text)
