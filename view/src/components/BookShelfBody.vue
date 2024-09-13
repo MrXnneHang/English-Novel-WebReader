@@ -22,7 +22,7 @@ export default {
   computed: {
     // 确保总共12个位置，如果书不够则用空位置补足
     formattedBooks() {
-      const totalSlots = 12; // 2行x6列，总共12个位置
+      const totalSlots = 10; // 2行x6列，总共12个位置
       const filledBooks = [...this.books];
       while (filledBooks.length < totalSlots) {
         filledBooks.push({id: null, title: ''});
@@ -48,15 +48,15 @@ export default {
 
 .bookshelf {
   display: grid;
-  grid-template-columns: repeat(6, 100px); /* 6 列，每列 100px */
+  grid-template-columns: repeat(5, 100px); /* 6 列，每列 100px */
   grid-template-rows: repeat(2, 200px); /* 2 行，每行 200px */
   justify-content: center; /* 水平居中 */
-  gap: 200px; /* 书籍之间的间距 */
+  gap: 250px; /* 书籍之间的间距 */
 }
 
 .book {
-  width: 250px;
-  height: 350px;
+  width: 300px;
+  height: 400px;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
