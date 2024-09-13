@@ -18,8 +18,6 @@ class WebConfig(object):
     def __init__(self):
         self.config = load_config()
         self.option = webdriver.ChromeOptions()
-        self.option.add_argument(
-            r"user-data-dir=C:\Users\Zhouyuan\AppData\Local\Google\Chrome for Testing\User Data")  # 浏览器路径
 
         # 指定Chrome和ChromeDriver的路径
         self.chrome_path = self.config['chrome']
@@ -35,8 +33,6 @@ class WebConfig(object):
     def get_data(self):
         """初始化WebDriver并获取cookies"""
         option = webdriver.ChromeOptions()
-        option.add_argument(
-            r"user-data-dir=C:\Users\Zhouyuan\AppData\Local\Google\Chrome for Testing\User Data")  # 浏览器路径
 
         # 指定Chrome和ChromeDriver的路径
         chrome_path = self.config['chrome']
