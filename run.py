@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
-from api import user_query, save_word,sentence_translate,preprocess_selected_sentence,save_sentence
+from api import user_query, save_word,sentence_translate,preprocess_selected_sentence,save_sentence,get_book_list
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -88,6 +88,10 @@ def save():
     else:
         return jsonify({'message': '没有可保存的数据！'}), 400
 
+@app.route('/api/get_book_list',methods=['POST'])
+def get_books():
+    books = get_book_list()
+    return jsonify(books)
 
 if __name__ == '__main__':
     initialize_webdriver()

@@ -16,6 +16,8 @@ import json
 
 config = load_config("config.yml")
 
+# --------------------------------------------------
+"""单词,句子翻译相关"""
 def sentence_translate(text):
     key = load_config("key.yml")
     api_key = key["deeplx"]
@@ -30,7 +32,6 @@ def sentence_translate(text):
     else:
         print(response)
         return text
-
 def save_sentence(origin_text,translation_text):
     data = load_config(config["sentence_translation"])
     insert_data = {"ID":len(data)+1,
@@ -128,7 +129,6 @@ def user_query(webconfig,driver,word):
         #     save_word(word,matched)
         return matched
 
-
 def save_word(word, matched):
     print(matched, word)
     date = time.strftime("%Y-%m-%d", time.localtime())
@@ -181,3 +181,15 @@ def save_word(word, matched):
     return f"Word '{word}' and its details have been saved successfully."
 
 
+# -------------------------------------------
+"""这里是书架相关."""
+import os
+
+def get_book_list():
+    book_dir = config["book_dir"]
+    book_list = os.listdir(book_dir)
+    books = [{"id": i, "title": book} for i, book in enumerate(book_list)]
+    return books
+
+if __name__ == "__main__":
+    print(get_book_list())
