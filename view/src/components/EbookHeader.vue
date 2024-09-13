@@ -1,25 +1,29 @@
 <template>
-  <div class="file-upload">
-    <input type="file" @change="onFileChange" accept=".txt" />
+  <div class="book-title">
+    <h1>{{ title }}</h1> <!-- 渲染书籍标题 -->
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    onFileChange: Function, // 从父组件接收上传文件时触发的方法
+    title: {
+      type: String,
+      required: true, // 父组件传入的书籍标题
+    },
   },
 };
 </script>
 
 <style scoped>
-.file-upload {
+.book-title {
   padding: 20px;
   background-color: #f8f8f8;
   text-align: center;
 }
-input[type="file"] {
-  padding: 10px;
-  font-size: 16px;
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
 }
 </style>
