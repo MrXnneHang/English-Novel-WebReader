@@ -8,7 +8,7 @@
       {{ text }}
     </div>
     <div class="message-actions">
-      <button class="save-button" @click="saveWord">Save Word</button>
+      <button class="save-button" @click="saveWord">Save Word/Sentence</button>
     </div>
   </div>
 </template>
