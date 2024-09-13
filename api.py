@@ -15,7 +15,9 @@ import requests
 import json
 
 def sentence_translate(text):
-    url = "https://api.deeplx.org/your_deeplx_api_key/translate"
+    key = load_config("key.yml")
+    api_key = key["deeplx"]
+    url = f"https://api.deeplx.org/{api_key}/translate"
     headers = {
         "Content-Type": "application/json"
     }
