@@ -1,21 +1,23 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Router from 'vue-router';
+import Bookshelf from '@/views/BookShelf.vue';
+import EbookReader from '@/views/EbookReader.vue';
 
-Vue.use(VueRouter);
+// 使用 Router
+Vue.use(Router);
 
-const routes = [
-  // {
-  //   path: '/Analyze',
-  //   name: 'Analyze',
-  //   component: Analyze,
-  // },
-
-
-  // 其他路由规则...
-];
-
-const router = new VueRouter({
-  routes,
+export default new Router({
+  mode: 'history',  // 使用 HTML5 的历史模式
+  routes: [
+    {
+      path: '/',
+      name: 'Bookshelf',
+      component: Bookshelf,
+    },
+    {
+      path: '/reader/:bookId',
+      name: 'EbookReader',
+      component: EbookReader,
+    },
+  ],
 });
-
-export default router;
