@@ -14,6 +14,8 @@ import yaml
 import requests
 import json
 
+config = load_config("config.yml")
+
 def sentence_translate(text):
     key = load_config("key.yml")
     api_key = key["deeplx"]
@@ -30,7 +32,7 @@ def sentence_translate(text):
         return text
 
 def save_sentence(origin_text,translation_text):
-    data = load_config("sentence.yml")
+    data = load_config(config["sentence_translation"])
     insert_data = {"ID":len(data)+1,
                    "create_user:":"xnne",
                    "created_at":time.strftime("%Y-%m-%d", 
@@ -41,7 +43,7 @@ def save_sentence(origin_text,translation_text):
                     "origin_text":origin_text,
                     "translation_text":translation_text}
     data.append(insert_data)
-    with open("sentence.yml", 'w', encoding='utf-8') as sentence_file:
+    with open(config["sentence_translation"], 'w', encoding='utf-8') as sentence_file:
         yaml.dump(data, sentence_file, allow_unicode=True)
     print("sentence saved successfully")
     return "sentence saved successfully"
@@ -132,8 +134,8 @@ def save_word(word, matched):
     date = time.strftime("%Y-%m-%d", time.localtime())
 
     # 加载配置文件
-    main = load_config("main.yml")
-    pos = load_config("pos.yml")
+    main = load_config(config["word_create"])
+    pos = load_config(config["word_translation"])
 
     # 检查单词是否已经存在于 main.yml 中
     for entry in main:
@@ -168,10 +170,10 @@ def save_word(word, matched):
         pos.append(pos_entry)
 
     # 保存更新后的数据到文件
-    with open("main.yml", 'w', encoding='utf-8') as main_file:
+    with open(config["word_create"], 'w', encoding='utf-8') as main_file:
         yaml.dump(main, main_file, allow_unicode=True)
 
-    with open("pos.yml", 'w', encoding='utf-8') as pos_file:
+    with open(config["word_translation"], 'w', encoding='utf-8') as pos_file:
         yaml.dump(pos, pos_file, allow_unicode=True)
 
 
