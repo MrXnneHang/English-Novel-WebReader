@@ -16,7 +16,7 @@
 
 ### 长句翻译：
 
-![image-20240912173949234](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121739709.png)
+![image-20240913133357354](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409131334335.png)
 
 
 
