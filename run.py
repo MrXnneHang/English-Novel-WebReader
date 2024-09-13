@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
-from api import user_query, save_word,sentence_translate,preprocess_selected_sentence
+from api import user_query, save_word,sentence_translate,preprocess_selected_sentence,save_sentence
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -54,6 +54,8 @@ def selected_word():
         print("翻译句子")
         processed_text = preprocess_selected_sentence(selected_text)
         translation = sentence_translate(processed_text)
+        global_translation = translation
+        global_word = processed_text
         return jsonify({
             'message': f'{processed_text}:\n{translation}'
         })
@@ -76,8 +78,13 @@ def save():
     global global_word, global_translation
 
     if global_word and global_translation:
-        response = save_word(global_word, global_translation)
-        return jsonify({'message': response})
+        is_sentence = rec_sentence(global_word)
+        if is_sentence:
+            response = save_sentence(global_word, global_translation)
+            return jsonify({'message': response})
+        else:
+            response = save_word(global_word, global_translation)
+            return jsonify({'message': response})
     else:
         return jsonify({'message': '没有可保存的数据！'}), 400
 

@@ -29,8 +29,24 @@ def sentence_translate(text):
         print(response)
         return text
 
+def save_sentence(origin_text,translation_text):
+    data = load_config("sentence.yml")
+    insert_data = {"ID":len(data)+1,
+                   "create_user:":"xnne",
+                   "created_at":time.strftime("%Y-%m-%d", 
+                                              time.localtime()),
+                   "review_count":0,
+                   "last_review_date":time.strftime("%Y-%m-%d",
+                                                    time.localtime()),
+                    "origin_text":origin_text,
+                    "translation_text":translation_text}
+    data.append(insert_data)
+    with open("sentence.yml", 'w', encoding='utf-8') as sentence_file:
+        yaml.dump(data, sentence_file, allow_unicode=True)
+    print("sentence saved successfully")
+    return "sentence saved successfully"
 def preprocess_selected_sentence(text):
-    return text.replace("\n","")
+    return text.replace("\n"," ")
 
 def query(webconfig,driver,query_word="hello"):
 
