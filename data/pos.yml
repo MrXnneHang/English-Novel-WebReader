@@ -26,3 +26,35 @@
   pos: phrase.
   translation: 物质文化：一个民族为满足其需求而制造的所有物质对象的总体，尤其是那些对生活的维持和延续至关重要的物品。
   word_ID: '3'
+- ID: '8'
+  pos: n.
+  translation: 造反者，反抗者；反抗权威者；叛逆者，不守规矩者
+  word_ID: '4'
+- ID: '9'
+  pos: v.
+  translation: 反叛，造反；违抗，不服从（权威）；反对，反抗（规定、行为规范等）；（胃、腿、头脑等）不听使唤
+  word_ID: '4'
+- ID: '10'
+  pos: adj.
+  translation: 造反的；反抗的
+  word_ID: '4'
+- ID: '11'
+  pos: n.
+  translation: 沥青；柏油
+  word_ID: '5'
+- ID: '12'
+  pos: vt.
+  translation: 以沥青铺
+  word_ID: '5'
+- ID: '13'
+  pos: adj.
+  translation: 用柏油铺成的
+  word_ID: '5'
+- ID: '14'
+  pos: n.
+  translation: 开场白；序言
+  word_ID: '6'
+- ID: '15'
+  pos: vt.
+  translation: 加上……前言；为……作序
+  word_ID: '6'
