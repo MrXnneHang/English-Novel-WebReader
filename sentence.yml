@@ -1,0 +1,16 @@
+- ID: 1
+  'create_user:': xnne
+  created_at: '2024-09-13'
+  last_review_date: '2024-09-13'
+  origin_text: Outside, the sun was shining, scorching the asphalt of driveways. Lawnmower
+    engines whirred, and children splashed in backyard pools.
+  review_count: 0
+  translation_text: 室外骄阳似火，炙烤着车道上的沥青。割草机的引擎声呼呼作响，孩子们在后院的水池里嬉戏。
+- ID: 2
+  'create_user:': xnne
+  created_at: '2024-09-13'
+  last_review_date: '2024-09-13'
+  origin_text: There’s no shame in surrender. As Taryn said, they’re just words. I
+    don’thave to mean them. I can lie.
+  review_count: 0
+  translation_text: 投降并不可耻。就像泰伦说的 只是说说而已我不必当真我可以撒谎
