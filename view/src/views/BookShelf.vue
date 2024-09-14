@@ -14,7 +14,7 @@ import BookshelfBody from '@/components/BookshelfBody.vue';
 import axios from 'axios';
 
 export default {
-  name: 'BookShelf',
+  name: 'Bookshelf',
   components: {
     BookshelfHeader,
     BookshelfBody,
@@ -47,13 +47,18 @@ export default {
         const bookAbsPath = response.data.book_abs_path;
         console.log('Book absolute path:', bookAbsPath);
 
-        // 跳转到 EbookReader 页面并传递路径
-        this.$router.push({ name: 'EbookReader', params: { bookPath: bookAbsPath } });
+        // 跳转到 EbookReader 页面并传递路径和书名
+        this.$router.push({
+          name: 'EbookReader',
+          params: {
+            bookPath: bookAbsPath,
+            bookTitle: book.title // 添加书名参数
+          }
+        });
       } catch (error) {
         console.error('Failed to fetch book path:', error);
       }
     }
-
   },
 };
 </script>

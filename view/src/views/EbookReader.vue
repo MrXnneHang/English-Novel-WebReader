@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 头部组件 -->
-    <Header :onFileChange="onFileChange" />
+    <Header :title="bookTitle" :onFileChange="onFileChange" />
 
     <!-- 包含左右文本页的容器组件 -->
     <Container
@@ -30,7 +30,7 @@
 import Header from '@/components/EbookHeader.vue';
 import Container from '@/components/TextContainer.vue';
 import Footer from '@/components/EbookFooter.vue';
-import MessageBubble from '@/components/MessageBubble.vue';  // 引入消息气泡组件
+import MessageBubble from '@/components/MessageBubble.vue';
 
 export default {
   name: 'EbookReader',
@@ -47,11 +47,11 @@ export default {
       currentPageIndex: 0,
       recordedWords: [],
       showBubble: false,
-      selectedText: ''
+      selectedText: '',
+      bookTitle: this.$route.params.bookTitle // 从路由参数中获取书名
     };
   },
   created() {
-    // 在组件创建时，检查路由参数是否包含书籍路径
     const bookPath = this.$route.params.bookPath;
     if (bookPath) {
       this.loadBookFromPath(bookPath);
@@ -66,7 +66,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ bookPath })
+          body: JSON.stringify({bookPath})
         });
 
         if (!response.ok) {
@@ -105,7 +105,7 @@ export default {
 
             currentLineCount += 1;
             if (currentLineCount >= linesPerPage) {
-              newPages.push(currentPage); // 使用新的数组存储分页数据
+              newPages.push(currentPage);
               currentPage = '';
               currentLineCount = 0;
             }
@@ -125,7 +125,7 @@ export default {
           tempLine = '';
           currentLineCount += 1;
           if (currentLineCount >= linesPerPage) {
-            newPages.push(currentPage); // 使用新的数组存储分页数据
+            newPages.push(currentPage);
             currentPage = '';
             currentLineCount = 0;
           }
@@ -135,10 +135,9 @@ export default {
       });
 
       if (currentPage.trim() !== '') {
-        newPages.push(currentPage); // 使用新的数组存储分页数据
+        newPages.push(currentPage);
       }
 
-      // 将分页数据设置为响应式
       this.pages = newPages;
     },
     handleScroll(event) {
@@ -169,7 +168,6 @@ export default {
         console.log("Selected text: ", selectedText);
         this.recordedWords.push(selectedText);
 
-        // 立即显示 "waiting for message..."
         this.showMessageBubble('Waiting for message...');
 
         try {
@@ -178,7 +176,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ selectedText }),
+            body: JSON.stringify({selectedText}),
           });
 
           if (!response.ok) {
@@ -186,38 +184,27 @@ export default {
           }
 
           const data = await response.json();
-          console.log('Response from server:', data);
-
-          // 在请求成功后，更新为后端返回的消息
           this.updateMessageBubble(data.message);
         } catch (error) {
           console.error('Error sending selected word:', error);
-
-          // 在请求失败时，显示错误的消息气泡
           this.updateMessageBubble('Error sending text to server.');
         }
       }
     },
 
-    // 显示消息气泡逻辑，首先显示 "waiting for message..."
     showMessageBubble(message) {
       console.log('Showing message bubble with text:', message);
       this.selectedText = message;
       this.showBubble = true;
 
-      // 清除之前的定时器，避免重叠定时器问题
       if (this.autoCloseTimer) {
         clearTimeout(this.autoCloseTimer);
       }
-
-      // 保持气泡显示，并等待后端消息或错误信息更新内容
     },
 
-    // 更新消息气泡内容的逻辑
     updateMessageBubble(newMessage) {
       this.selectedText = newMessage;
 
-      // 设置自动关闭
       if (this.autoCloseTimer) {
         clearTimeout(this.autoCloseTimer);
       }
@@ -229,13 +216,12 @@ export default {
   },
   computed: {
     totalPages() {
-      return this.pages.length;  // 返回分页后的总页数
+      return this.pages.length;
     },
     readingProgress() {
-      if (this.totalPages === 0) return 0;  // 如果没有分页，返回0
-      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100);  // 计算当前阅读进度百分比
+      if (this.totalPages === 0) return 0;
+      return Math.floor(((this.currentPageIndex + 2) / this.totalPages) * 100);
     }
   }
-
 };
 </script>

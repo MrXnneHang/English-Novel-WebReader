@@ -3,7 +3,6 @@
     <h1>{{ title }}</h1> <!-- 渲染书籍标题 -->
   </div>
 </template>
-
 <script>
 export default {
   props: {
