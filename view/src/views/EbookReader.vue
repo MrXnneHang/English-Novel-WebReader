@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 头部组件 -->
-    <Header :title="bookTitle" :onFileChange="onFileChange" />
+    <Header :title="bookTitle"  />
 
     <!-- 包含左右文本页的容器组件 -->
     <Container
