@@ -14,7 +14,7 @@
 
  ![image-20240912162929020](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409121629345.png)
 
-### 长句翻译：
+### 长句翻译和记录：
 
 ![image-20240913133357354](https://fastly.jsdelivr.net/gh/MrXnneHang/blog_img/BlogHosting/img/24/09/202409131334335.png)
 
@@ -33,42 +33,57 @@
 
 
 
-## 如何使用：
+## 如何部署启动：
 
 ### 前端: 
 
-你需要自行安装和配置[nvm](https://github.com/nvm-sh/nvm)
+你需要自行安装和配置nvm   
+[linux nvm](https://github.com/nvm-sh/nvm)    
+[windows nvm](https://github.com/coreybutler/nvm-windows/releases)   
+
 
 ```cmd
 nvm use 18
 cd ./view
 npm install 
-npm run serve
+npm run serve -- --port 8081
 ```
 
-然后，你应该可以在访问:[127.0.0.1:8080](127.0.0.1:8080)来访问前端。
+然后，你应该可以在访问:[127.0.0.1:8081](127.0.0.1:8081)来访问前端。
 
 ### 后端:
 
-如果要完成查单词的功能，需要一些前置。
-具体参考:[free-EN2CN-dictionary](https://github.com/MrXnneHang/free-EN2CN-dictionary)的环境部署。  
-
-注意先查看`config.yml`中的chrome-driver,chrome路径是否正确。
-
-然后创建`./key.yml`
-
-内容:
-
-```yaml
-deeplx: your_api_key
+python环境:
 ```
-
-这个L站有提供，在connect里可以看到。如果没有L站账户，可以等待后续本地运行deeplx的服务的版本。
-
-```cmd
 python -m pip install -r requirements.txt
+```
+之后有两种方法。   
+
+**common:**    
+
+你需要    
+[chrome driver和chrome test](https://googlechromelabs.github.io/chrome-for-testing/)，注意两者版本的对应。    
+[deeplx-local](https://github.com/ycvk/deeplx-local/releases/tag/v0.2.4),我用的是`deeplx-v0.2.4-windows-amd64.zip`
+```cmd
+powershell -ExecutionPolicy Bypass -File ".\deeplx-local.ps1"
 python run.py
 ```
 
+**specially:**    
+
+如果你是linux.do的用户，你可以创建`./key.yml`,写入:  
+```yaml
+deeplx:your_api_key   
+```
+这个key可以再connect处获取。然后运行:
+```cmd
+python run.py --use_api_key
+```
 
 
+
+
+
+## 如何使用：
+
+参见[English-Novel-WebReader使用手册](./English-Novel-WebReader使用手册.md)
