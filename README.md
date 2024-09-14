@@ -63,7 +63,8 @@ python -m pip install -r requirements.txt
 
 你需要    
 [chrome driver和chrome test](https://googlechromelabs.github.io/chrome-for-testing/)，注意两者版本的对应。    
-[deeplx-local](https://github.com/ycvk/deeplx-local/releases/tag/v0.2.4),我用的是`deeplx-v0.2.4-windows-amd64.zip`
+[deeplx-local](https://github.com/ycvk/deeplx-local/releases/tag/v0.2.4),我用的是`deeplx-v0.2.4-windows-amd64.zip`    
+你需要核对路径，在config.yml中核对chrome的路径，在deeplx-local.ps1中核对deeplx.exe的路径。
 ```cmd
 powershell -ExecutionPolicy Bypass -File ".\deeplx-local.ps1"
 python run.py
