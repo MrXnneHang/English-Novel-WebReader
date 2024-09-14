@@ -1,18 +1,22 @@
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
-from api import user_query, save_word,sentence_translate,preprocess_selected_sentence,save_sentence,get_book_list,get_book_abs_path
+from api import user_query, save_word,private_sentence_translate,preprocess_selected_sentence,save_sentence,get_book_list,get_book_abs_path,local_deeplx_sentence_translate
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webrowser_config import WebConfig
 import shutil
 from epub_parser import convert_to_txt
+import argparse
 
 app = Flask(__name__)
 CORS(app)
 
 webconfig = WebConfig()
 driver = None
+parser = argparse.ArgumentParser(description="决定使用是否使用私有api-key")
+parser.add_argument("--use_api_key", action="store_true", help="如果指定了，则会使用linux.do的api-key，否则,则使用公共服务")
+
 
 # Global variables to store the last word and translation
 global_word = None
@@ -54,8 +58,12 @@ def selected_word():
     is_sentence = rec_sentence(selected_text)
     if is_sentence:
         print("翻译句子")
+        args = parser.parse_args()
         processed_text = preprocess_selected_sentence(selected_text)
-        translation = sentence_translate(processed_text)
+        if args.use_api_key:
+            translation = private_sentence_translate(processed_text)
+        else:
+            translation = local_deeplx_sentence_translate(processed_text)
         global_translation = translation
         global_word = processed_text
         return jsonify({
@@ -150,5 +158,6 @@ def save_book_api():
 
 
 if __name__ == '__main__':
+
     initialize_webdriver()
     app.run(port=5000)

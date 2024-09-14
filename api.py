@@ -18,10 +18,32 @@ config = load_config("config.yml")
 
 # --------------------------------------------------
 """单词,句子翻译相关"""
-def sentence_translate(text):
+def private_sentence_translate(text):
+    """
+    这个api-key在Linux.do的connect中可以查看，
+    创建./key.yml，写入:
+    deeplx:XXXXX
+    """
     key = load_config("key.yml")
     api_key = key["deeplx"]
+    if api_key is None:
+        print("请先创建key.yml文件，并写入:\ndeeplx: api-key\n注意:后留一个空格\n或者使用local deeplx")
     url = f"https://api.deeplx.org/{api_key}/translate"
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = {"text":text, "source_lang":"EN","target_lang":"ZH"}
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        print(response)
+        return text
+
+def local_deeplx_sentence_translate(text):
+    """本地并发请求现存的api接口,
+       感谢:https://github.com/ycvk/deeplx-local"""
+    url = f"http://localhost:62155/translate"
     headers = {
         "Content-Type": "application/json"
     }
