@@ -14,7 +14,7 @@ import BookshelfBody from '@/components/BookshelfBody.vue';
 import axios from 'axios';
 
 export default {
-  name: 'Bookshelf',
+  name: 'BookshelfMain',
   components: {
     BookshelfHeader,
     BookshelfBody,
